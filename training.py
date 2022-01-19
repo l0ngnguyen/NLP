@@ -94,17 +94,23 @@ class PhobertTraining():
                           for x in self.tokenizer.model_input_names}
         train_tf_dataset = tf.data.Dataset.from_tensor_slices(
             (train_features, train_labels))
-        self.train_tf_dataset = train_tf_dataset.shuffle(
-            len(tf_train_dataset)).batch(batch_size)
+        self._train_tf_dataset = train_tf_dataset.shuffle(len(tf_train_dataset))#.batch(batch_size)
 
         eval_features = {x: tf_eval_dataset[x]
                          for x in self.tokenizer.model_input_names}
         eval_tf_dataset = tf.data.Dataset.from_tensor_slices(
             (eval_features, eval_labels))
-        self.eval_tf_dataset = eval_tf_dataset.batch(batch_size)
-
+        self._eval_tf_dataset = eval_tf_dataset#.batch(batch_size)
+        
+        self.get_batch_data(batch_size)
+        
+    def get_batch_data(self, batch_size):
+        self.train_tf_dataset = self._train_tf_dataset.batch(batch_size)
+        self.eval_tf_dataset = self._train_tf_dataset.batch(batch_size)
+        
         print(f'train dataset shape: {self.train_tf_dataset}')
         print(f'validation dataset shape: {self.eval_tf_dataset}')
+        
 
     def plot_train_history(self, history):
         # list all data in history
