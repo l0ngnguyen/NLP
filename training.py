@@ -103,8 +103,8 @@ class PhobertTraining():
             (eval_features, eval_labels))
         self.eval_tf_dataset = eval_tf_dataset.batch(batch_size)
 
-        print(f'train dataset shape: {train_tf_dataset}')
-        print(f'validation dataset shape: {eval_tf_dataset}')
+        print(f'train dataset shape: {self.train_tf_dataset}')
+        print(f'validation dataset shape: {self.eval_tf_dataset}')
 
     def plot_train_history(self, history):
         # list all data in history
@@ -130,6 +130,10 @@ class PhobertTraining():
     def load_model(self, path):
         self.model = tf.keras.models.load_model(path)
         print('Load model successfully!')
+        
+    def load_weights(self, path):
+        self.init_model()
+        self.model.load_weights(path)
 
     def init_model(self, freeze=True):
         self.model = TFAutoModelForSequenceClassification.from_pretrained(
@@ -158,7 +162,8 @@ class PhobertTraining():
             tf.keras.callbacks.ModelCheckpoint(
                 filepath=os.path.join(
                     checkpoint_dir, "model.{epoch:02d}-{val_loss:.2f}.h5"
-                )
+                ),
+                save_weights_only=True
             ),
             tf.keras.callbacks.TensorBoard(log_dir=log_dir),
         ]
