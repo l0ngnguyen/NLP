@@ -32,7 +32,6 @@ def load_data():
 
 def svm_straing(X_train, y_train):
     print("start training")
-    PATHS = load_yaml("paths")
 
     text_clf = Pipeline(
         [
@@ -50,8 +49,7 @@ def svm_straing(X_train, y_train):
         ]
     )
     text_clf = text_clf.fit(X_train, y_train)
-    # Save model
-    pickle.dump(text_clf, open(PATHS["model"], "wb"))
+
     return text_clf
 
 

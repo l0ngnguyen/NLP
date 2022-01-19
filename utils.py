@@ -3,6 +3,8 @@ import os
 import time
 
 import yaml
+import pandas as pd
+from sklearn.utils import shuffle
 
 LOG_DIR = os.path.join("logs")
 LOG_FORMAT = "%(levelname)s %(name)s %(asctime)s - %(message)s"
@@ -12,6 +14,27 @@ if not os.path.isdir(LOG_DIR):
 
 log_filename = os.path.join(LOG_DIR, "crawling.log")
 
+
+def split_data(df, train_size, is_shuffle=True):
+  train_dfs = []
+  test_dfs = []
+  categories = df.category.unique()
+
+  for cat in categories:
+    cat_data = df[df.category == cat]
+    if is_shuffle:
+        cat_data = shuffle(cat_data)
+    cat_data.reset_index(inplace=True, drop=True)
+
+    n_train_rows = int(cat_data.shape[0] * train_size) if train_size < 1 else train_size
+
+    train_dfs.append(cat_data.iloc[:n_train_rows, :])
+    test_dfs.append(cat_data.iloc[n_train_rows:, :])
+
+    train_df = pd.concat(train_dfs, axis=0).reset_index(drop=True)
+    test_df = pd.concat(test_dfs, axis=0).reset_index(drop=True)
+
+    return train_df, test_df
 
 def get_logger(logger_name):
     logging.basicConfig(filename=log_filename, level=logging.INFO, format=LOG_FORMAT)
