@@ -90,16 +90,20 @@ class PhobertTraining():
         tf_train_dataset = train_dataset.with_format("tensorflow")
         tf_eval_dataset = eval_dataset.with_format("tensorflow")
 
-        train_features = {x: tf_train_dataset[x]
-                          for x in self.tokenizer.model_input_names}
+        train_features = {
+            x: tf_train_dataset[x]for x in self.tokenizer.model_input_names
+        }
         train_tf_dataset = tf.data.Dataset.from_tensor_slices(
-            (train_features, train_labels))
+            (train_features, train_labels)
+        )
         self._train_tf_dataset = train_tf_dataset.shuffle(len(tf_train_dataset))#.batch(batch_size)
 
-        eval_features = {x: tf_eval_dataset[x]
-                         for x in self.tokenizer.model_input_names}
+        eval_features = {
+            x: tf_eval_dataset[x] for x in self.tokenizer.model_input_names
+        }
         eval_tf_dataset = tf.data.Dataset.from_tensor_slices(
-            (eval_features, eval_labels))
+            (eval_features, eval_labels)
+        )
         self._eval_tf_dataset = eval_tf_dataset#.batch(batch_size)
         
         self.get_batch_data(batch_size)
