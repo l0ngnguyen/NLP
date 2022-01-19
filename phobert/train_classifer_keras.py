@@ -28,9 +28,8 @@ def load_text(data, ids_method):
         tkz = ids_method(data[i])
         ids.append(tkz)
     ids = pad_sequences(
-        ids, maxlen=MAX_LEN, dtype="int32", value=0, truncating="post", padding="post"
+        ids, maxlen=MAX_LEN, dtype="int32", value=1, truncating="post", padding="post"
     )
-    ids[:, -1] = 2
     return ids
 
 

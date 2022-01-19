@@ -108,6 +108,7 @@ class PhobertTraining():
         self.train_tf_dataset = self._train_tf_dataset.batch(batch_size)
         self.eval_tf_dataset = self._train_tf_dataset.batch(batch_size)
         
+        print(f'batch size = {batch_size}')
         print(f'train dataset shape: {self.train_tf_dataset}')
         print(f'validation dataset shape: {self.eval_tf_dataset}')
         
