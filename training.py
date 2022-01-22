@@ -141,17 +141,17 @@ class PhobertTraining():
         print('Load model successfully!')
         
     def load_weights(self, path):
-        self.init_model()
+        assert self.model is not None, "Init model before load weights"
         self.model.load_weights(path)
 
-    def init_model(self, freeze=True):
+    def init_model(self, lr=5e-5, freeze=True):
         self.model = TFAutoModelForSequenceClassification.from_pretrained(
             self.phobert_base,
             num_labels=len(self.le.classes_)
         )
         
         self.model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=5e-5),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
             metrics=tf.metrics.SparseCategoricalAccuracy(),
         )
@@ -177,8 +177,7 @@ class PhobertTraining():
             tf.keras.callbacks.TensorBoard(log_dir=log_dir),
         ]
 
-        if self.model is None:
-            self.init_model()
+        assert self.model is not None, "Init model before training"
 
         print(self.model.summary())
         # fit the model

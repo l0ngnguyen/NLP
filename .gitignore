@@ -131,6 +131,7 @@ dmypy.json
 .vscode
 data/pho*
 data/*.csv
+data/*.h5
 data/*.pickle
 data/models/*
 data/training_data
